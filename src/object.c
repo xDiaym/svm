@@ -1,5 +1,9 @@
+#include <assert.h>
 #include <object.h>
+#include <panic.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string_object.h>
 
 static svm_object *first_object = NULL;
 static svm_object *last_object = NULL;
@@ -38,4 +42,22 @@ void release(svm_object *obj) {
   if (obj->ref_count == 0) {
     object_delete(obj);
   }
+}
+
+svm_object *svm_object_call(svm_object *this, svm_object **args) {
+  assert(this != NULL);
+  if (this->type->m_call == NULL) {
+    // TODO: add terminate method
+    fprintf(stderr, "Attemp to call non-callable object [%x]", this);
+    exit(-1);
+  }
+  return this->type->m_call(this, args);
+}
+
+svm_object *svm_object_add(svm_object *this, svm_object *other) {
+  assert(this != NULL);
+  if (this->type->m_add == NULL) {
+    panic(stderr, "Attemp to call non-callale object [%x]", this);
+  }
+  return this->type->m_add(this, other);
 }

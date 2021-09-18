@@ -11,3 +11,5 @@ typedef struct _string_object {
 } string_object;
 
 svm_object *string_object_from_c_str(const char *c_str);
+
+extern svm_object_type string_object_type;
