@@ -6,9 +6,8 @@ static svm_object *last_object = NULL;
 
 static void update_global_objects_pointers(svm_object *obj) {
   if (first_object == NULL)
-    first_object = obj;
-  if (last_object != NULL)
-    last_object->next = obj;
+    first_object = last_object = obj;
+  last_object->next = obj;
   last_object = obj;
 }
 
