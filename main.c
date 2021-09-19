@@ -1,16 +1,13 @@
+#include <int_object.h>
 #include <object.h>
 #include <stdio.h>
 #include <string_object.h>
 
 int main() {
-  string_object *s1 = NEW(string_object, string_object_from_c_str("Hello "));
-  string_object *s2 = NEW(string_object, string_object_from_c_str("world\n"));
-  string_object *x = NEW(string_object, svm_object_add(s1, s2));
-
-  printf("X: %s", x->data);
-
+  int_object *x = NEW(int_object, int_object_from_int(-42));
+  string_object *y = NEW(string_object, svm_object_to_string(AS_SVM_OBJECT(x)));
+  printf("%s\n", y->data);
+  DELETE(y);
   DELETE(x);
-  DELETE(s1);
-  DELETE(s2);
   return 0;
 }

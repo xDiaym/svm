@@ -61,3 +61,11 @@ svm_object *svm_object_add(svm_object *this, svm_object *other) {
   }
   return this->type->m_add(this, other);
 }
+
+svm_object *svm_object_to_string(svm_object *this) {
+  assert(this != NULL);
+  if (this->type->m_to_string == NULL) {
+    panic(stderr, "Attemp to call non-string-convertable object [%x]", this);
+  }
+  return this->type->m_to_string(this);
+}

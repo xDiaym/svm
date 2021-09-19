@@ -1,5 +1,5 @@
 TARGET=svm
-SRCS=main.c src/object.c src/string_object.c src/panic.c
+SRCS=main.c src/object.c src/string_object.c src/panic.c src/int_object.c
 OBJS=$(SRCS:.c=.o)
 INCLUDE_DIR=include
 CFLAGS=-Wall -Wextra -std=c11 -I$(INCLUDE_DIR)
