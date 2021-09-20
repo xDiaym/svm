@@ -9,5 +9,6 @@ typedef struct _int_object {
 } int_object;
 
 svm_object *int_object_from_int(int64_t value);
+int64_t int_object_to_int(svm_object *int_);
 
 extern svm_object_type int_object_type;

@@ -57,7 +57,7 @@ svm_object *svm_object_call(svm_object *this, svm_object **args) {
 svm_object *svm_object_add(svm_object *this, svm_object *other) {
   assert(this != NULL);
   if (this->type->m_add == NULL) {
-    panic(stderr, "Attemp to call non-callale object [%x]", this);
+    panic("Attemp to call non-callale object [%x]", this);
   }
   return this->type->m_add(this, other);
 }
@@ -65,7 +65,15 @@ svm_object *svm_object_add(svm_object *this, svm_object *other) {
 svm_object *svm_object_to_string(svm_object *this) {
   assert(this != NULL);
   if (this->type->m_to_string == NULL) {
-    panic(stderr, "Attemp to call non-string-convertable object [%x]", this);
+    panic("Attemp to call non-string-convertable object [%x]", this);
   }
   return this->type->m_to_string(this);
+}
+
+svm_object *svm_object_index(svm_object *this, svm_object *index) {
+  assert(this != NULL);
+  if (this->type->m_index == NULL) {
+    panic("Attemp to index non-index object [%x]", this);
+  }
+  return this->type->m_index(this, index);
 }

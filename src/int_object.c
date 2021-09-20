@@ -9,6 +9,13 @@ svm_object *int_object_from_int(int64_t value) {
   return AS_SVM_OBJECT(int_);
 }
 
+int64_t int_object_to_int(svm_object *int_) {
+  if (!HAS_TYPE(int_object_type, int_)) {
+    panic("Attemp to convert non-int-object to int.");
+  }
+  return AS_TYPE(int_object, int_)->value;
+}
+
 static void int_desctructor(svm_object *this) {}
 
 static svm_object *int_object_add(svm_object *this, svm_object *other) {

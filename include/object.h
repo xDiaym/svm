@@ -39,6 +39,7 @@ void release(svm_object *obj);
 svm_object *svm_object_call(svm_object *this, svm_object **args);
 svm_object *svm_object_add(svm_object *this, svm_object *other);
 svm_object *svm_object_to_string(svm_object *this);
+svm_object *svm_object_index(svm_object *this, svm_object *index);
 
 #define CREATE_OBJECT(object, type)                                            \
   (object *)svm_object_create(type, sizeof(object))
@@ -48,7 +49,7 @@ svm_object *svm_object_to_string(svm_object *this);
 #define SVM_OBJECT_HEAD svm_object _object
 
 #define AS_TYPE(type, x) ((type *)x)
-#define HAS_TYPE(type, x) (AS_SVM_OBJECT(x)->type == &type)
+#define HAS_TYPE(type_, x) (AS_SVM_OBJECT(x)->type == &type_)
 #define SAME_TYPE(x, y) (AS_SVM_OBJECT(x)->type == AS_SVM_OBJECT(y)->type)
 
 #define NEW(type, x) ((type *)retain(x))

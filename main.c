@@ -4,10 +4,15 @@
 #include <string_object.h>
 
 int main() {
-  int_object *x = NEW(int_object, int_object_from_int(-42));
-  string_object *y = NEW(string_object, svm_object_to_string(AS_SVM_OBJECT(x)));
-  printf("%s\n", y->data);
-  DELETE(y);
-  DELETE(x);
+  string_object *str =
+      NEW(string_object, string_object_from_c_str("Hello world!"));
+  int_object *index = NEW(int_object, int_object_from_int(7));
+  string_object *s = NEW(string_object, svm_object_index(str, index));
+
+  printf("%s", s->data);
+
+  DELETE(s);
+  DELETE(str);
+  DELETE(index);
   return 0;
 }
