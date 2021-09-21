@@ -1,5 +1,5 @@
 #include <assert.h>
-#include <object.h>
+#include <objects/object.h>
 #include <stddef.h>
 #include <stdlib.h>
 
@@ -8,7 +8,6 @@ typedef struct _int_object {
   int64_t value;
 } int_object;
 
-svm_object *int_object_from_int(int64_t value);
-int64_t int_object_to_int(svm_object *int_);
+int_object *int_object_from_int(int64_t value);
 
 extern svm_object_type int_object_type;

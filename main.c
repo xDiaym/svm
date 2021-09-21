@@ -1,18 +1,19 @@
-#include <int_object.h>
-#include <object.h>
+#include <objects/int_object.h>
+#include <objects/object.h>
+#include <objects/string_object.h>
 #include <stdio.h>
-#include <string_object.h>
 
 int main() {
   string_object *str =
-      NEW(string_object, string_object_from_c_str("Hello world!"));
-  int_object *index = NEW(int_object, int_object_from_int(7));
-  string_object *s = NEW(string_object, svm_object_index(str, index));
+      RETAIN(string_object, string_object_from_c_str("Hello world!"));
+  int_object *index = RETAIN(int_object, int_object_from_int(7));
+  string_object *s = RETAIN(string_object,
+             svm_object_index(AS_SVM_OBJECT(str), AS_SVM_OBJECT(index)));
 
-  printf("%s", s->data);
+  printf("%s\n", s->data);
 
-  DELETE(s);
-  DELETE(str);
-  DELETE(index);
+  RELEASE(s);
+  RELEASE(str);
+  RELEASE(index);
   return 0;
 }
