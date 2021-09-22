@@ -50,7 +50,9 @@ svm_object *retain(svm_object *obj) {
 }
 
 static void object_delete(svm_object *obj) {
-  obj->type->m_destructor(obj);
+  if (SVM_OBJECT_TYPE(obj)->m_destructor != NULL) {
+    SVM_OBJECT_TYPE(obj)->m_destructor(obj);
+  }
   // TODO: add custom allocator
   free(obj);
 }

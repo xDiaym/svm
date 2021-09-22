@@ -11,10 +11,6 @@ int_object *int_object_from_int(int64_t value) {
   return int_;
 }
 
-static void int_destructor(svm_object *this) {
-  UNUSED(this);
-}
-
 static int_object *int_object_add(int_object *this, svm_object *other) {
   if (!SAME_TYPE(this, other)) {
     panic("Attemp to concat string object with non-string object.");
@@ -44,9 +40,6 @@ static string_object *int_object_to_string(int_object *this) {
 }
 
 svm_object_type int_object_type = {
-    /*destructor_method=*/&int_destructor,
-    /*call_method=*/NULL,
-    /*index_method=*/NULL,
-    /*add_method=*/(add_method)&int_object_add,
-    /*to_string_method=*/(to_string_method)&int_object_to_string,
+    .m_add=(add_method)&int_object_add,
+    .m_to_string=(to_string_method)&int_object_to_string,
 };
