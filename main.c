@@ -12,6 +12,7 @@ int main() {
 
   printf("%s\n", s->data);
 
+  svm_object_print_debug_info(AS_SVM_OBJECT(index));
   RELEASE(s);
   RELEASE(str);
   RELEASE(index);

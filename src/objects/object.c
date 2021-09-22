@@ -15,6 +15,24 @@ static void update_global_objects_pointers(svm_object *obj) {
   last_object = obj;
 }
 
+static void svm_object_print_type(svm_object_type *type) {
+  printf("Type:\n"
+         "destructor: %p\n"
+         "call: %p\n"
+         "index: %p\n"
+         "add: %p\n"
+         "to_string: %p\n",
+         type->m_destructor, type->m_call, type->m_index, type->m_add,
+         type->m_to_string);
+}
+
+void svm_object_print_debug_info(svm_object *object) {
+  printf("SVM object at [%p].\n"
+         "References: %zu\n",
+         object, object->ref_count);
+  svm_object_print_type(object->type);
+}
+
 svm_object *svm_object_create(svm_object_type *type, size_t object_size) {
   svm_object *object = (svm_object *)malloc(object_size);
   object->next = NULL;
@@ -56,7 +74,7 @@ void release(svm_object *obj) {
   }
 
 #define BUILTIN_METHOD_IMPL_2_ARGS(method)                                     \
-  svm_object *svm_object_##method(svm_object *this, svm_object* arg) {         \
+  svm_object *svm_object_##method(svm_object *this, svm_object *arg) {         \
     assert(this != NULL);                                                      \
     if (GET_METHOD(this, method) == NULL) {                                    \
       panic("Attempt to call method '%s' on object[%p] without that method.",  \

@@ -31,6 +31,8 @@ typedef struct _svm_object {
 
 #define SVM_OBJECT_HEAD svm_object _object
 
+void svm_object_print_debug_info(svm_object* object);
+
 svm_object *svm_object_create(svm_object_type *type, size_t object_size);
 #define CREATE_OBJECT(object, type)                                            \
   (object *)svm_object_create(type, sizeof(object))
