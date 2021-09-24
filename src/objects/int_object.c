@@ -20,14 +20,7 @@ static int_object *int_object_add(int_object *this, svm_object *other) {
 }
 
 static size_t int_dec_length(int64_t value) {
-  size_t len = 1;
-  if (value < 0)
-    ++len;
-  while (value > 10) {
-    ++len;
-    value %= 10;
-  }
-  return len;
+  return snprintf(NULL, 0, "%li", value);
 }
 
 static string_object *int_object_to_string(int_object *this) {
