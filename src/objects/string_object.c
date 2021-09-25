@@ -62,9 +62,9 @@ static string_object *string_object_index(string_object *this, svm_object *index
 static string_object *string_to_string(string_object *this) { return this; }
 
 svm_object_type string_object_type = {
-    /*destructor_method=*/(desctructor_method)&string_destructor,
-    /*call_method=*/NULL,
-    /*index_method=*/(index_method)&string_object_index,
-    /*add_method=*/(add_method)&string_object_concat,
-    /*to_string_method=*/(to_string_method)&string_to_string,
+    .m_destructor = (desctructor_method)&string_destructor,
+    .m_call = NULL,
+    .m_index = (index_method)&string_object_index,
+    .m_add = (add_method)&string_object_concat,
+    .m_to_string = (to_string_method)&string_to_string,
 };
