@@ -1,5 +1,11 @@
 TARGET=svm
-SRCS=main.c src/objects/object.c src/objects/string_object.c src/objects/builtin_function_object.c src/objects/int_object.c src/panic.c
+SRCS=main.c \
+	src/objects/object.c \
+	src/objects/string_object.c \
+	src/objects/builtin_function_object.c \
+	src/objects/int_object.c \
+	src/objects/null_object.c \
+	src/panic.c
 OBJS=$(SRCS:.c=.o)
 INCLUDE_DIR=include
 CFLAGS=-ggdb -g -Wall -Wextra -std=c11 -I$(INCLUDE_DIR)
