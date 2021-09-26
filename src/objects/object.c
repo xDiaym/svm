@@ -11,9 +11,10 @@ static svm_object *last_object = NULL;
 static void update_global_objects_pointers(svm_object *obj) {
   if (first_object == NULL) {
     first_object = last_object = obj;
+  } else {
+    last_object->next = obj;
+    last_object = obj;
   }
-  last_object->next = obj;
-  last_object = obj;
 }
 
 static void svm_object_print_type(svm_object_type *type) {
