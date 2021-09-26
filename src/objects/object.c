@@ -30,8 +30,9 @@ static void svm_object_print_type(svm_object_type *type) {
 
 void svm_object_print_debug_info(svm_object *object) {
   printf("SVM object at [%p].\n"
-         "References: %zu\n",
-         object, object->ref_count);
+         "References: %zu\n"
+         "Next object at: [%p]\n",
+         object, object->ref_count, object->next);
   svm_object_print_type(object->type);
 }
 
