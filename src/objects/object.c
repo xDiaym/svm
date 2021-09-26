@@ -68,7 +68,7 @@ void release(svm_object *obj) {
 }
 
 #define GET_METHOD(object, method_name) SVM_OBJECT_TYPE(object)->m_##method_name
-#define BUILTIN_METHOD_IMPL_1_ARG(method)                                      \
+#define GENERATE_BUILTIN_UNARY_OP_IMPL(method)                                 \
   svm_object *svm_object_##method(svm_object *this) {                          \
     assert(this != NULL);                                                      \
     if (GET_METHOD(this, method) == NULL) {                                    \
@@ -78,7 +78,7 @@ void release(svm_object *obj) {
     return GET_METHOD(this, method)(this);                                     \
   }
 
-#define BUILTIN_METHOD_IMPL_2_ARGS(method)                                     \
+#define GENERATE_BUILTIN_BINARY_OP_IMPL(method)                                \
   svm_object *svm_object_##method(svm_object *this, svm_object *arg) {         \
     assert(this != NULL);                                                      \
     if (GET_METHOD(this, method) == NULL) {                                    \
@@ -88,9 +88,11 @@ void release(svm_object *obj) {
     return GET_METHOD(this, method)(this, arg);                                \
   }
 
-BUILTIN_METHOD_IMPL_1_ARG(to_string)
-BUILTIN_METHOD_IMPL_2_ARGS(add)
-BUILTIN_METHOD_IMPL_2_ARGS(index)
+/**
+ * Some preprocessor magic. `METHODS` macro contains all methods name.
+ * First argument applies to unary operations, second - to binary.
+ */
+METHODS(GENERATE_BUILTIN_UNARY_OP_IMPL, GENERATE_BUILTIN_BINARY_OP_IMPL)
 
 svm_object *svm_object_call(svm_object *this, svm_object **args) {
   assert(this != NULL);
