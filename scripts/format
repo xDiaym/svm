@@ -1,0 +1,4 @@
+#!/bin/bash
+
+SRCS=$(find . -name '*.[ch]')
+clang-format -i --sort-includes $SRCS
