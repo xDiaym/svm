@@ -1,8 +1,8 @@
+#include <common.h>
 #include <objects/builtin_function_object.h>
-#include <objects/int_object.h>
+#include <objects/null_object.h>
 #include <objects/object.h>
 #include <objects/string_object.h>
-#include <objects/null_object.h>
 #include <stdio.h>
 
 // prints first arg to stdio

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+SRCS=$(find . -name '*.[ch]')
+clang-tidy \
+  --checks=-*,performance-*,readability-*,portability-* \
+  $SRCS \
+  -- "$@" # cflags

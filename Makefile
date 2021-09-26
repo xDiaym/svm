@@ -8,10 +8,10 @@ SRCS=main.c \
 	src/panic.c
 OBJS=$(SRCS:.c=.o)
 INCLUDE_DIR=include
-CFLAGS=-ggdb -g -Wall -Wextra -std=c11 -I$(INCLUDE_DIR)
+CFLAGS=-std=c99 -ggdb -g -Wall -Wextra -I$(INCLUDE_DIR)
 LDFLAGS=
 
-.PHONY: all clean
+.PHONY: all clean lint
 
 all: $(TARGET)
 
@@ -19,8 +19,11 @@ clean:
 	find . -name '*.o' -exec rm {} \;
 	rm $(TARGET)
 
+lint:
+	@eval 'scripts/lint $(CFLAGS)'
+
 $(TARGET): $(OBJS)
-	$(CC) $(LDFLAGS) -o $(TARGET) $(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(TARGET) $(OBJS)
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@

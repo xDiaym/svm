@@ -1,4 +1,3 @@
-#include <common.h>
 #include <objects/int_object.h>
 #include <objects/object.h>
 #include <objects/string_object.h>
@@ -13,7 +12,7 @@ int_object *int_object_from_int(int64_t value) {
 
 static int_object *int_object_add(int_object *this, svm_object *other) {
   if (!SAME_TYPE(this, other)) {
-    panic("Attemp to concat string object with non-string object.");
+    panic("Attempt to concat string object with non-string object.");
   }
   int_object *s = CAST_TO(int_object, other);
   return int_object_from_int(this->value + s->value);

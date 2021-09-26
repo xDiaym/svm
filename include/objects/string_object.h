@@ -11,6 +11,6 @@ typedef struct _string_object {
 } string_object;
 
 string_object *string_object_from_c_str(const char *c_str);
-string_object *string_object_from_str(const char *c_str, size_t size);
+string_object *string_object_from_str(const char *c_str, size_t length);
 
 extern svm_object_type string_object_type;

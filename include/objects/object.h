@@ -51,6 +51,6 @@ void release(svm_object *obj);
 #define RELEASE(x) release(AS_SVM_OBJECT(x))
 
 svm_object *svm_object_call(svm_object *this, svm_object **args);
-svm_object *svm_object_add(svm_object *this, svm_object *other);
-svm_object *svm_object_index(svm_object *this, svm_object *index);
+svm_object *svm_object_add(svm_object *this, svm_object *arg);
+svm_object *svm_object_index(svm_object *this, svm_object *arg);
 svm_object *svm_object_to_string(svm_object *this);
