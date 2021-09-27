@@ -1,3 +1,4 @@
+#include <allocator.h>
 #include <assert.h>
 #include <common.h>
 #include <objects/object.h>
@@ -37,7 +38,7 @@ void svm_object_print_debug_info(svm_object *object) {
 }
 
 svm_object *svm_object_create(svm_object_type *type, size_t object_size) {
-  svm_object *object = (svm_object *)malloc(object_size);
+  svm_object *object = (svm_object *)svm_malloc(object_size);
   object->next = NULL;
   object->ref_count = 0;
   object->type = type;
@@ -56,8 +57,7 @@ static void object_delete(svm_object *obj) {
   if (SVM_OBJECT_TYPE(obj)->m_destructor != NULL) {
     SVM_OBJECT_TYPE(obj)->m_destructor(obj);
   }
-  // TODO: add custom allocator
-  free(obj);
+  svm_free(obj);
 }
 
 void release(svm_object *obj) {

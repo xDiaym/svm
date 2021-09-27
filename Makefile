@@ -5,7 +5,8 @@ SRCS=main.c \
 	src/objects/builtin_function_object.c \
 	src/objects/int_object.c \
 	src/objects/null_object.c \
-	src/panic.c
+	src/panic.c \
+	src/allocator.c
 OBJS=$(SRCS:.c=.o)
 INCLUDE_DIR=include
 CFLAGS=-std=c99 -ggdb -g -Wall -Wextra -I$(INCLUDE_DIR)

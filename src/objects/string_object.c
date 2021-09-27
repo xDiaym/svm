@@ -1,3 +1,4 @@
+#include <allocator.h>
 #include <objects/int_object.h>
 #include <objects/string_object.h>
 #include <panic.h>
@@ -6,7 +7,7 @@
 string_object *string_object_from_c_str(const char *c_str) {
   string_object *str = CREATE_OBJECT(string_object, &string_object_type);
   str->length = strlen(c_str);
-  str->data = calloc(str->length, sizeof(char));
+  str->data = svm_calloc(str->length, sizeof(char));
   assert(str->data); // TODO:
 
   strcpy(str->data, c_str);
@@ -17,7 +18,7 @@ string_object *string_object_from_c_str(const char *c_str) {
 string_object *string_object_from_str(const char *c_str, size_t length) {
   string_object *str = CREATE_OBJECT(string_object, &string_object_type);
   str->length = length + 1;
-  str->data = calloc(str->length, sizeof(char));
+  str->data = svm_calloc(str->length, sizeof(char));
   assert(str->data); // TODO:
 
   memcpy(str->data, c_str, length);
@@ -26,11 +27,10 @@ string_object *string_object_from_str(const char *c_str, size_t length) {
   return str;
 }
 
-static void string_destructor(string_object *this) {
-  free(this->data);
-}
+static void string_destructor(string_object *this) { free(this->data); }
 
-static string_object *string_object_concat(string_object *this, svm_object *other) {
+static string_object *string_object_concat(string_object *this,
+                                           svm_object *other) {
   if (!HAS_TYPE(string_object_type, other)) {
     panic("Attempt to concat string object with non-string object.");
   }
@@ -39,7 +39,7 @@ static string_object *string_object_concat(string_object *this, svm_object *othe
 
   string_object *str = CREATE_OBJECT(string_object, &string_object_type);
   str->length = this->length + other_s->length;
-  str->data = calloc(str->length, sizeof(char));
+  str->data = svm_calloc(str->length, sizeof(char));
   assert(str->data); // TODO:
 
   memcpy(str->data, this->data, this->length);
@@ -48,7 +48,8 @@ static string_object *string_object_concat(string_object *this, svm_object *othe
   return str;
 }
 
-static string_object *string_object_index(string_object *this, svm_object *index) {
+static string_object *string_object_index(string_object *this,
+                                          svm_object *index) {
   if (!HAS_TYPE(int_object_type, index)) {
     panic("Attempt to index string object with non-int object.");
   }
@@ -63,7 +64,6 @@ static string_object *string_to_string(string_object *this) { return this; }
 
 svm_object_type string_object_type = {
     .m_destructor = (desctructor_method)&string_destructor,
-    .m_call = NULL,
     .m_index = (index_method)&string_object_index,
     .m_add = (add_method)&string_object_concat,
     .m_to_string = (to_string_method)&string_to_string,

@@ -10,9 +10,7 @@ null_object *get_null_object() {
   return g_null;
 }
 
-static string_object *to_string() {
-  return string_object_from_c_str("null");
-}
+static string_object *to_string() { return string_object_from_c_str("null"); }
 
 svm_object_type null_object_type = {
     .m_to_string = (to_string_method)&to_string,

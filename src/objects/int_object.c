@@ -32,6 +32,6 @@ static string_object *int_object_to_string(int_object *this) {
 }
 
 svm_object_type int_object_type = {
-    .m_add=(add_method)&int_object_add,
-    .m_to_string=(to_string_method)&int_object_to_string,
+    .m_add = (add_method)&int_object_add,
+    .m_to_string = (to_string_method)&int_object_to_string,
 };

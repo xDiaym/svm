@@ -12,6 +12,7 @@ svm_object *print(svm_object **args) {
   RELEASE(str);
   return NULL;
 }
+#include <malloc.h>
 
 int main() {
   builtin_function_object *print_ =
