@@ -1,10 +1,10 @@
 #pragma once
 #include <stddef.h>
 
-typedef void (*svm_free_f)(void* old);
-typedef void* (*svm_malloc_f)(size_t size);
-typedef void* (*svm_calloc_f)(size_t count, size_t size);
-typedef void* (*svm_realloc_f)(void* old, size_t new_size);
+typedef void (*svm_free_f)(void *old);
+typedef void *(*svm_malloc_f)(size_t size);
+typedef void *(*svm_calloc_f)(size_t count, size_t size);
+typedef void *(*svm_realloc_f)(void *old, size_t new_size);
 
 struct allocators {
   svm_free_f free;

@@ -23,6 +23,9 @@ clean:
 lint:
 	@eval 'scripts/lint $(CFLAGS)'
 
+format:
+	@scripts/format
+
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(TARGET) $(OBJS)
 

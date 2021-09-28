@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <allocator.h>
+#include <stdlib.h>
 
 svm_free_f svm_free = &free;
 svm_malloc_f svm_malloc = &malloc;
