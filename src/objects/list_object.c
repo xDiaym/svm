@@ -13,7 +13,7 @@ typedef struct _list_node {
 static list_node_t *list_node_new(svm_object *value) {
   list_node_t *node = svm_malloc(sizeof(list_node_t));
   node->next = node->prev = NULL;
-  node->value = value;
+  node->value = RETAIN(value);
   return node;
 }
 

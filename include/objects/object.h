@@ -49,7 +49,7 @@ svm_object *svm_object_create(svm_object_type *type, size_t object_size);
 #define SAME_TYPE(x, y) (AS_SVM_OBJECT(x)->type == AS_SVM_OBJECT(y)->type)
 
 svm_object *retain(svm_object *obj);
-#define RETAIN(type, x) CAST_TO(type, retain(AS_SVM_OBJECT(x)))
+#define RETAIN(x) retain(AS_SVM_OBJECT(x))
 
 void release(svm_object *obj);
 #define RELEASE(x) release(AS_SVM_OBJECT(x))
