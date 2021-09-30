@@ -1,20 +1,21 @@
 #include <allocator.h>
 #include <assert.h>
 #include <common.h>
+#include <gc.h>
 #include <objects/object.h>
 #include <panic.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-static svm_object *first_object = NULL;
-static svm_object *last_object = NULL;
+static svm_object *g_first_object = NULL;
+static svm_object *g_last_object = NULL;
 
 static void update_global_objects_pointers(svm_object *obj) {
-  if (first_object == NULL) {
-    first_object = last_object = obj;
+  if (g_first_object == NULL) {
+    g_first_object = g_last_object = obj;
   } else {
-    last_object->next = obj;
-    last_object = obj;
+    g_last_object->next = obj;
+    g_last_object = obj;
   }
 }
 
@@ -42,11 +43,14 @@ svm_object *svm_object_create(svm_object_type *type, size_t object_size) {
   object->next = NULL;
   object->ref_count = 0;
   object->type = type;
+  object->gc_flags = GC_COLLECTABLE;
 
   update_global_objects_pointers(object);
 
   return object;
 }
+
+svm_object *get_first_object() { return g_first_object; }
 
 svm_object *retain(svm_object *obj) {
   ++obj->ref_count;
@@ -93,6 +97,15 @@ void release(svm_object *obj) {
  * First argument applies to unary operations, second - to binary.
  */
 METHODS(GENERATE_BUILTIN_UNARY_OP_IMPL, GENERATE_BUILTIN_BINARY_OP_IMPL)
+
+void svm_object_traverse(svm_object *this, traverse_op op) {
+  assert(this != NULL);
+  // If already visited, do not mark due to possible recursion.
+  int is_visited = op(this);
+  if (!is_visited && SVM_OBJECT_TYPE(this)->m_traverse != NULL) {
+    SVM_OBJECT_TYPE(this)->m_traverse(this, op);
+  }
+}
 
 svm_object *svm_object_call(svm_object *this, svm_object **args) {
   assert(this != NULL);

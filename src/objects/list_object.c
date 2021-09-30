@@ -10,20 +10,24 @@ typedef struct _list_node {
   svm_object *value;
 } list_node_t;
 
+static svm_object_type list_node_type;
+
 static list_node_t *list_node_new(svm_object *value) {
-  list_node_t *node = svm_malloc(sizeof(list_node_t));
+  list_node_t *node = CREATE_OBJECT(list_node_t, &list_node_type);
   node->next = node->prev = NULL;
   node->value = RETAIN(value);
   return node;
 }
 
-static void list_node_destructor(list_node_t* node) {
-    RELEASE(node->value);
+static void list_node_traverse(list_node_t *this, traverse_op op) {
+  svm_object_traverse(this->value, op);
 }
 
-svm_object_type list_node_type = {
-    .m_destructor = (desctructor_method)&list_node_destructor
-};
+static void list_node_destructor(list_node_t *node) { RELEASE(node->value); }
+
+static svm_object_type list_node_type = {
+    .m_traverse = (traverse_method)&list_node_traverse,
+    .m_destructor = (desctructor_method)&list_node_destructor};
 
 /* list_object section */
 
@@ -55,7 +59,7 @@ static void list_destructor(list_object *this) {
   }
 }
 
-static svm_object *list_index(list_object* this, svm_object* index) {
+static svm_object *list_index(list_object *this, svm_object *index) {
   if (!HAS_TYPE(int_object_type, index)) {
     panic("Attempt to index list object with non-int index");
   }
@@ -81,7 +85,16 @@ static svm_object *list_index(list_object* this, svm_object* index) {
   return ptr->value;
 }
 
+void list_traverse(list_object *this, traverse_op op) {
+  list_node_t *node = this->head;
+  while (node) {
+    svm_object_traverse(AS_SVM_OBJECT(node), op);
+    node = node->next;
+  }
+}
+
 svm_object_type list_object_type = {
+    .m_traverse = (traverse_method)&list_traverse,
     .m_destructor = (desctructor_method)&list_destructor,
     .m_index = (index_method)&list_index,
 };

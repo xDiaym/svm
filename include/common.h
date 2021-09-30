@@ -4,3 +4,5 @@
 #define STR(x) _STR_IMPL(x)
 
 #define UNUSED(x) (void)(x)
+
+#define BIT(x) (1ull << (x))
