@@ -29,6 +29,11 @@ static svm_object_type list_node_type = {
     .m_traverse = (traverse_method)&list_node_traverse,
     .m_destructor = (desctructor_method)&list_node_destructor};
 
+static void list_node_link(list_node_t *l, list_node_t *r) {
+  l->next = CAST_TO(list_node_t, RETAIN(r));
+  r->prev = CAST_TO(list_node_t, RETAIN(l));
+}
+
 /* list_object section */
 
 list_object *list_object_new() {
@@ -41,11 +46,12 @@ list_object *list_object_new() {
 void list_object_push_back(list_object *this, svm_object *object) {
   list_node_t *node = list_node_new(object);
   if (this->head == NULL) {
-    this->head = this->tail = node;
+    this->head = CAST_TO(list_node_t, RETAIN(node));
+    this->tail = CAST_TO(list_node_t, RETAIN(node));
   } else {
-    this->tail->next = node;
-    node->prev = this->tail;
-    this->tail = node;
+    list_node_link(this->tail, node);
+    RELEASE(this->tail);
+    this->tail = CAST_TO(list_node_t, RETAIN(node));;
   }
   ++this->size;
 }
