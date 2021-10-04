@@ -8,3 +8,13 @@ int mark_traverse(svm_object *this) {
 }
 
 void gc_mark() { svm_object_traverse(get_first_object(), &mark_traverse); }
+
+void gc_sweep() {
+  svm_object *obj = get_first_object();
+  while (obj) {
+    if (!(obj->gc_flags & GC_MARKED)) {
+      svm_object_unlink(obj);
+    }
+    obj = obj->next;
+  }
+}

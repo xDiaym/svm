@@ -58,6 +58,10 @@ svm_object *retain(svm_object *obj) {
 }
 
 static void object_delete(svm_object *obj) {
+  // Avoid recursive destructor calls.
+  if (obj->gc_flags & GC_DELETE_READY) return;
+  obj->gc_flags |= GC_DELETE_READY;
+
   if (SVM_OBJECT_TYPE(obj)->m_destructor != NULL) {
     SVM_OBJECT_TYPE(obj)->m_destructor(obj);
   }
@@ -104,6 +108,13 @@ void svm_object_traverse(svm_object *this, traverse_op op) {
   int is_visited = op(this);
   if (!is_visited && SVM_OBJECT_TYPE(this)->m_traverse != NULL) {
     SVM_OBJECT_TYPE(this)->m_traverse(this, op);
+  }
+}
+
+void svm_object_unlink(svm_object *this) {
+  assert(this != NULL);
+  if (SVM_OBJECT_TYPE(this)->m_unlink) {
+    SVM_OBJECT_TYPE(this)->m_unlink(this);
   }
 }
 

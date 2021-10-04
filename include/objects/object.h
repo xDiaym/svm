@@ -12,6 +12,7 @@ typedef int(traverse_op)(svm_object *this);
 typedef svm_object *(*unary_op)(svm_object *this);
 typedef svm_object *(*binary_op)(svm_object *this, svm_object *other);
 
+typedef void(*unlink_method)(svm_object *this);
 typedef void (*traverse_method)(svm_object *this, traverse_op op);
 typedef void (*desctructor_method)(svm_object *this);
 typedef svm_object *(*call_method)(svm_object *this, svm_object **args);
@@ -25,6 +26,7 @@ METHODS(GENERATE_UNARY_METHOD_TYPEDEF, GENERATE_BINARY_METHOD_TYPEDEF)
 typedef struct _svm_object_type {
   /* internal methods */
   traverse_method m_traverse;
+  unlink_method m_unlink;
   desctructor_method m_destructor;
   /* special methods */
   call_method m_call;
@@ -75,7 +77,7 @@ METHODS(GENERATE_UNARY_METHOD_DEFINITION, GENERATE_BINARY_METHOD_DEFINITION)
  * if exists.
  *
  * *ALL* container-types should traverse their elements through this function
- *
  */
 void svm_object_traverse(svm_object *this, traverse_op op);
+void svm_object_unlink(svm_object *this);
 svm_object *svm_object_call(svm_object *this, svm_object **args);

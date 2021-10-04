@@ -1,3 +1,4 @@
+#include <allocator.h>
 #include <common.h>
 #include <gc.h>
 #include <objects/builtin_function_object.h>
@@ -14,6 +15,7 @@ int main() {
   list_object_push_back(list, AS_SVM_OBJECT(list));
 
   gc_mark();
+  gc_sweep();
 
   return 0;
 }
