@@ -14,7 +14,7 @@ int main() {
   list_object_push_back(list, AS_SVM_OBJECT(list));
   list_object_push_back(list, AS_SVM_OBJECT(list));
 
-  gc_mark();
+  // gc_mark();
   gc_sweep();
 
   return 0;

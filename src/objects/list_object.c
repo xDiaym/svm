@@ -28,13 +28,16 @@ static void list_node_unlink(list_node_t *this) {
   this->value = NULL;
 }
 
-static void list_node_destructor(list_node_t *node) { RELEASE(node->value); }
+static void list_node_destructor(list_node_t *node) {
+  if (node->value) {
+    RELEASE(node->value);
+  }
+}
 
 static svm_object_type list_node_type = {
     .m_unlink = (unlink_method)&list_node_unlink,
     .m_traverse = (traverse_method)&list_node_traverse,
-    .m_destructor = (desctructor_method)&list_node_destructor
-};
+    .m_destructor = (desctructor_method)&list_node_destructor};
 
 static void list_node_link(list_node_t *l, list_node_t *r) {
   l->next = CAST_TO(list_node_t, RETAIN(r));

@@ -12,7 +12,7 @@ typedef int(traverse_op)(svm_object *this);
 typedef svm_object *(*unary_op)(svm_object *this);
 typedef svm_object *(*binary_op)(svm_object *this, svm_object *other);
 
-typedef void(*unlink_method)(svm_object *this);
+typedef void (*unlink_method)(svm_object *this);
 typedef void (*traverse_method)(svm_object *this, traverse_op op);
 typedef void (*desctructor_method)(svm_object *this);
 typedef svm_object *(*call_method)(svm_object *this, svm_object **args);
@@ -61,6 +61,7 @@ svm_object *get_first_object();
 svm_object *retain(svm_object *obj);
 #define RETAIN(x) retain(AS_SVM_OBJECT(x))
 
+void svm_object_delete(svm_object *this);
 void release(svm_object *obj);
 #define RELEASE(x) release(AS_SVM_OBJECT(x))
 

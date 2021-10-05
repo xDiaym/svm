@@ -57,21 +57,17 @@ svm_object *retain(svm_object *obj) {
   return obj;
 }
 
-static void object_delete(svm_object *obj) {
-  // Avoid recursive destructor calls.
-  if (obj->gc_flags & GC_DELETE_READY) return;
-  obj->gc_flags |= GC_DELETE_READY;
-
-  if (SVM_OBJECT_TYPE(obj)->m_destructor != NULL) {
-    SVM_OBJECT_TYPE(obj)->m_destructor(obj);
+void svm_object_delete(svm_object *this) {
+  if (SVM_OBJECT_TYPE(this)->m_destructor != NULL) {
+    SVM_OBJECT_TYPE(this)->m_destructor(this);
   }
-  svm_free(obj);
+  svm_free(this);
 }
 
 void release(svm_object *obj) {
   --obj->ref_count;
   if (obj->ref_count == 0) {
-    object_delete(obj);
+    svm_object_delete(obj);
   }
 }
 
