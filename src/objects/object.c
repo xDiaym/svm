@@ -65,6 +65,7 @@ void svm_object_delete(svm_object *this) {
 }
 
 void release(svm_object *obj) {
+  if (!obj) return;
   --obj->ref_count;
   if (obj->ref_count == 0) {
     svm_object_delete(obj);
