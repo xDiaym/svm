@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 int main() {
-  list_object *list = list_object_new();
+  list_object_t *list = list_object_new();
   list_object_push_back(list, AS_SVM_OBJECT(list));
   list_object_push_back(list, AS_SVM_OBJECT(list));
 

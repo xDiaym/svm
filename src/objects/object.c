@@ -7,10 +7,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static svm_object *g_first_object = NULL;
-static svm_object *g_last_object = NULL;
+static svm_object_t *g_first_object = NULL;
+static svm_object_t *g_last_object = NULL;
 
-static void update_global_objects_pointers(svm_object *obj) {
+static void update_global_objects_pointers(svm_object_t *obj) {
   if (g_first_object == NULL) {
     g_first_object = g_last_object = obj;
   } else {
@@ -30,7 +30,7 @@ static void svm_object_print_type(svm_object_type *type) {
          type->m_to_string);
 }
 
-void svm_object_print_debug_info(svm_object *object) {
+void svm_object_print_debug_info(svm_object_t *object) {
   printf("SVM object at [%p].\n"
          "References: %zu\n"
          "Next object at: [%p]\n",
@@ -38,8 +38,8 @@ void svm_object_print_debug_info(svm_object *object) {
   svm_object_print_type(object->type);
 }
 
-svm_object *svm_object_create(svm_object_type *type, size_t object_size) {
-  svm_object *object = (svm_object *)svm_malloc(object_size);
+svm_object_t *svm_object_create(svm_object_type *type, size_t object_size) {
+  svm_object_t *object = (svm_object_t *)svm_malloc(object_size);
   object->next = NULL;
   object->ref_count = 0;
   object->type = type;
@@ -50,21 +50,21 @@ svm_object *svm_object_create(svm_object_type *type, size_t object_size) {
   return object;
 }
 
-svm_object *get_first_object() { return g_first_object; }
+svm_object_t *get_first_object() { return g_first_object; }
 
-svm_object *retain(svm_object *obj) {
+svm_object_t *retain(svm_object_t *obj) {
   ++obj->ref_count;
   return obj;
 }
 
-void svm_object_delete(svm_object *this) {
+void svm_object_delete(svm_object_t *this) {
   if (SVM_OBJECT_TYPE(this)->m_destructor != NULL) {
     SVM_OBJECT_TYPE(this)->m_destructor(this);
   }
   svm_free(this);
 }
 
-void release(svm_object *obj) {
+void release(svm_object_t *obj) {
   if (!obj) return;
   --obj->ref_count;
   if (obj->ref_count == 0) {
@@ -74,7 +74,7 @@ void release(svm_object *obj) {
 
 #define GET_METHOD(object, method_name) SVM_OBJECT_TYPE(object)->m_##method_name
 #define GENERATE_BUILTIN_UNARY_OP_IMPL(method)                                 \
-  svm_object *svm_object_##method(svm_object *this) {                          \
+  svm_object_t *svm_object_##method(svm_object_t *this) {                      \
     assert(this != NULL);                                                      \
     if (GET_METHOD(this, method) == NULL) {                                    \
       panic("Attempt to call method '%s' on object[%p] without that method.",  \
@@ -84,7 +84,7 @@ void release(svm_object *obj) {
   }
 
 #define GENERATE_BUILTIN_BINARY_OP_IMPL(method)                                \
-  svm_object *svm_object_##method(svm_object *this, svm_object *arg) {         \
+  svm_object_t *svm_object_##method(svm_object_t *this, svm_object_t *arg) {   \
     assert(this != NULL);                                                      \
     if (GET_METHOD(this, method) == NULL) {                                    \
       panic("Attempt to call method '%s' on object[%p] without that method.",  \
@@ -99,7 +99,7 @@ void release(svm_object *obj) {
  */
 METHODS(GENERATE_BUILTIN_UNARY_OP_IMPL, GENERATE_BUILTIN_BINARY_OP_IMPL)
 
-void svm_object_traverse(svm_object *this, traverse_op op) {
+void svm_object_traverse(svm_object_t *this, traverse_op op) {
   assert(this != NULL);
   // If already visited, do not mark due to possible recursion.
   int is_visited = op(this);
@@ -108,14 +108,14 @@ void svm_object_traverse(svm_object *this, traverse_op op) {
   }
 }
 
-void svm_object_unlink(svm_object *this) {
+void svm_object_unlink(svm_object_t *this) {
   assert(this != NULL);
   if (SVM_OBJECT_TYPE(this)->m_unlink) {
     SVM_OBJECT_TYPE(this)->m_unlink(this);
   }
 }
 
-svm_object *svm_object_call(svm_object *this, svm_object **args) {
+svm_object_t *svm_object_call(svm_object_t *this, svm_object_t **args) {
   assert(this != NULL);
   if (this->type->m_call == NULL) {
     panic("Attempt to call method '%s' on object[%p] without that method.",
