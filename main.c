@@ -20,10 +20,11 @@ int main() {
 
   gc_mark(AS_SVM_OBJECT(int_1));
   gc_mark(AS_SVM_OBJECT(int_2));
-  gc_sweep();
+  size_t deleted = gc_sweep();
 
   gc_stat_t stat = gc_get_global_stat();
-  printf("Marked: %zu, Deleted: %zu", stat.marked, stat.deleted);
+  printf("Marked: %zu, Deleted: %zu\n", stat.marked, stat.deleted);
+  printf("Deleted in 1st round: %zu\n", deleted);
 
   return 0;
 }

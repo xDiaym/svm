@@ -11,6 +11,6 @@ typedef struct {
 } gc_stat_t;
 
 void gc_mark(svm_object_t *obj);
-void gc_sweep();
+size_t gc_sweep();
 
 gc_stat_t gc_get_global_stat();
