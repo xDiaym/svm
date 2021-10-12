@@ -10,7 +10,7 @@ typedef struct {
   size_t deleted;
 } gc_stat_t;
 
-void gc_mark(svm_object_t *obj);
+size_t gc_mark(svm_object_t *obj);
 size_t gc_sweep();
 
 gc_stat_t gc_get_global_stat();

@@ -19,8 +19,8 @@ static list_node_t *list_node_new(svm_object_t *value) {
   return node;
 }
 
-static void list_node_traverse(list_node_t *this, traverse_op op) {
-  svm_object_traverse(this->value, op);
+static void list_node_traverse(list_node_t *this, traverse_op op, void *args) {
+  svm_object_traverse(this->value, op, args);
 }
 
 static void list_node_unlink(list_node_t *this) {
@@ -109,7 +109,7 @@ static void list_unlink(list_object_t *this) {
 static void list_traverse(list_object_t *this, traverse_op op) {
   list_node_t *node = this->head;
   while (node) {
-    svm_object_traverse(AS_SVM_OBJECT(node), op);
+    svm_object_traverse(AS_SVM_OBJECT(node), op, NULL);
     node = node->next;
   }
 }

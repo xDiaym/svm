@@ -1,6 +1,6 @@
 #include <allocator.h>
 #include <common.h>
-#include <gc.h>
+#include <objects/../gc.h> // FIXME: rename gc.h(some file has same name)
 #include <objects/builtin_function_object.h>
 #include <objects/int_object.h>
 #include <objects/list_object.h>
@@ -18,13 +18,15 @@ int main() {
 
   int_object_t *int_2 = CAST_TO(int_object_t, RETAIN(int_object_from_int(42)));
 
-  gc_mark(AS_SVM_OBJECT(int_1));
-  gc_mark(AS_SVM_OBJECT(int_2));
+  size_t marked = 0;
+  marked += gc_mark(AS_SVM_OBJECT(int_1));
+  marked += gc_mark(AS_SVM_OBJECT(int_2));
   size_t deleted = gc_sweep();
 
   gc_stat_t stat = gc_get_global_stat();
   printf("Marked: %zu, Deleted: %zu\n", stat.marked, stat.deleted);
   printf("Deleted in 1st round: %zu\n", deleted);
+  printf("Marked in 1st round: %zu\n", marked);
 
   return 0;
 }

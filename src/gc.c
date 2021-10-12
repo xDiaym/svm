@@ -9,15 +9,20 @@ static gc_stat_t g_gc_stat = {
     .deleted = 0
 };
 
-int mark_traverse(svm_object_t *this) {
+int mark_traverse(svm_object_t *this, size_t* marked) {
   G_MARKED();
+  ++(*marked);
 
   int previous_flags = this->gc_flags;
   this->gc_flags |= GC_MARKED;
   return previous_flags & GC_MARKED;
 }
 
-void gc_mark(svm_object_t *obj) { svm_object_traverse(obj, &mark_traverse); }
+size_t gc_mark(svm_object_t *obj) {
+  size_t marked = 0;
+  svm_object_traverse(obj, &mark_traverse, &marked);
+  return marked;
+}
 
 size_t gc_sweep() {
   size_t deleted = 0;

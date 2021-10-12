@@ -99,12 +99,12 @@ void release(svm_object_t *obj) {
  */
 METHODS(GENERATE_BUILTIN_UNARY_OP_IMPL, GENERATE_BUILTIN_BINARY_OP_IMPL)
 
-void svm_object_traverse(svm_object_t *this, traverse_op op) {
+void svm_object_traverse(svm_object_t *this, traverse_op op, void *args) {
   assert(this != NULL);
   // If already visited, do not mark due to possible recursion.
-  int is_visited = op(this);
+  int is_visited = op(this, args);
   if (!is_visited && SVM_OBJECT_TYPE(this)->m_traverse != NULL) {
-    SVM_OBJECT_TYPE(this)->m_traverse(this, op);
+    SVM_OBJECT_TYPE(this)->m_traverse(this, op, args);
   }
 }
 
