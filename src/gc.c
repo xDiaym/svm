@@ -1,16 +1,12 @@
 #include <gc.h>
 #include <objects/object.h>
 
-#define G_MARKED() ++g_gc_stat.marked
-#define G_DELETED() ++g_gc_stat.deleted
-
 static gc_stat_t g_gc_stat = {
     .marked = 0,
     .deleted = 0
 };
 
 int mark_traverse(svm_object_t *this, size_t* marked) {
-  G_MARKED();
   ++(*marked);
 
   int previous_flags = this->gc_flags;
@@ -33,7 +29,6 @@ size_t gc_sweep() {
   while (obj) {
     next = obj->next;
     if (!(obj->gc_flags & GC_MARKED)) {
-      G_DELETED();
       ++deleted;
       svm_object_unlink(obj);
       svm_object_delete(obj);
@@ -47,6 +42,20 @@ size_t gc_sweep() {
     obj = next;
   }
   return deleted;
+}
+
+gc_stat_t gc_round(svm_object_t **objs) {
+  gc_stat_t stat = {0, 0};
+  while (*objs) {
+    stat.marked += gc_mark(*objs);
+    ++objs;
+  }
+  stat.deleted = gc_sweep();
+
+  g_gc_stat.deleted += stat.deleted;
+  g_gc_stat.marked += stat.marked;
+
+  return stat;
 }
 
 gc_stat_t gc_get_global_stat() {

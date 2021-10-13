@@ -18,15 +18,12 @@ int main() {
 
   int_object_t *int_2 = CAST_TO(int_object_t, RETAIN(int_object_from_int(42)));
 
-  size_t marked = 0;
-  marked += gc_mark(AS_SVM_OBJECT(int_1));
-  marked += gc_mark(AS_SVM_OBJECT(int_2));
-  size_t deleted = gc_sweep();
+  svm_object_t *reachable[] = {AS_SVM_OBJECT(int_1), AS_SVM_OBJECT(int_2), NULL};
+  gc_stat_t round_stat = gc_round(reachable);
 
-  gc_stat_t stat = gc_get_global_stat();
-  printf("Marked: %zu, Deleted: %zu\n", stat.marked, stat.deleted);
-  printf("Deleted in 1st round: %zu\n", deleted);
-  printf("Marked in 1st round: %zu\n", marked);
+  gc_stat_t global_stat = gc_get_global_stat();
+  printf("[Global] Marked: %zu, Deleted: %zu\n", global_stat.marked, global_stat.deleted);
+  printf("[Round 1] Marked: %zu, Deleted: %zu\n", round_stat.marked, round_stat.deleted);
 
   return 0;
 }
