@@ -13,4 +13,4 @@ typedef struct {
 list_object_t *list_object_new();
 void list_object_push_back(list_object_t *this, svm_object_t *object);
 
-extern svm_object_type list_object_type;
+extern svm_object_type TYPE_NAME(list_object_t);

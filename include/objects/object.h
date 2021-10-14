@@ -47,8 +47,8 @@ struct _svm_object {
 void svm_object_print_debug_info(svm_object_t *object);
 
 svm_object_t *svm_object_create(svm_object_type *type, size_t object_size);
-#define CREATE_OBJECT(object, type)                                            \
-  (object *)svm_object_create(type, sizeof(object))
+#define CREATE_OBJECT(object)                                            \
+  (object *)svm_object_create(&TYPE_NAME(object), sizeof(object))
 
 svm_object_t *get_first_object();
 
@@ -57,6 +57,12 @@ svm_object_t *get_first_object();
 #define SVM_OBJECT_TYPE(x) (AS_SVM_OBJECT(x)->type)
 #define HAS_TYPE(type, x) (SVM_OBJECT_TYPE(x) == &(type))
 #define SAME_TYPE(x, y) (AS_SVM_OBJECT(x)->type == AS_SVM_OBJECT(y)->type)
+
+#define TYPE_NAME(object_name) object_name##_type
+svm_object_t *safe_cast(svm_object_t *obj, svm_object_type type);
+#define SAFE_CAST(object_class, x) \
+  CAST_TO(object_class, (safe_cast(x, TYPE_NAME(object_class))))
+
 
 svm_object_t *retain(svm_object_t *obj);
 #define RETAIN(x) retain(AS_SVM_OBJECT(x))

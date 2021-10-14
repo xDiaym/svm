@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 int_object_t *int_object_from_int(int64_t value) {
-  int_object_t *int_ = CREATE_OBJECT(int_object_t, &int_object_type);
+  int_object_t *int_ = CREATE_OBJECT(int_object_t);
   int_->value = value;
   return int_;
 }
@@ -31,7 +31,7 @@ static string_object_t *int_object_to_string(int_object_t *this) {
   return str;
 }
 
-svm_object_type int_object_type = {
+svm_object_type TYPE_NAME(int_object_t) = {
     .m_add = (add_method)&int_object_add,
     .m_to_string = (to_string_method)&int_object_to_string,
 };

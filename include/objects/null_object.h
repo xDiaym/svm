@@ -13,4 +13,4 @@ typedef struct {
 null_object_t *get_null_object();
 #define SVM_NULL get_null_object()
 
-extern svm_object_type null_object_type;
+extern svm_object_type TYPE_NAME(null_object);

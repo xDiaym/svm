@@ -10,4 +10,4 @@ typedef struct {
 
 int_object_t *int_object_from_int(int64_t value);
 
-extern svm_object_type int_object_type;
+extern svm_object_type TYPE_NAME(int_object_t);

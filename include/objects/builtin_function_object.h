@@ -12,4 +12,4 @@ typedef struct {
 builtin_function_object_t *builtin_function_from_c(const char *name,
                                                  c_api_function func);
 
-extern svm_object_type builtin_function_object_type;
+extern svm_object_type TYPE_NAME(builtin_function_object_t);

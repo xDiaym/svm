@@ -12,6 +12,6 @@ null_object_t *get_null_object() {
 
 static string_object_t *to_string() { return string_object_from_c_str("null"); }
 
-svm_object_type null_object_type = {
+svm_object_type TYPE_NAME(null_object) = {
     .m_to_string = (to_string_method)&to_string,
 };

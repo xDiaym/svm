@@ -52,6 +52,14 @@ svm_object_t *svm_object_create(svm_object_type *type, size_t object_size) {
 
 svm_object_t *get_first_object() { return g_first_object; }
 
+svm_object_t *safe_cast(svm_object_t *obj, svm_object_type type) {
+  if (!HAS_TYPE(type, obj)) {
+    // TODO: more informative message
+    panic("Cannot cast.");
+  }
+  return obj;
+}
+
 svm_object_t *retain(svm_object_t *obj) {
   ++obj->ref_count;
   return obj;
