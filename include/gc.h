@@ -10,7 +10,6 @@ typedef struct {
   size_t deleted;
 } gc_stat_t;
 
-
 gc_stat_t gc_round(svm_object_t **objs);
 
 size_t gc_mark(svm_object_t *obj);

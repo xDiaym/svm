@@ -34,7 +34,7 @@ static void list_node_destructor(list_node_t *node) {
   }
 }
 
-static svm_object_type list_node_type = {
+static svm_object_type TYPE_NAME(list_node_t) = {
     .m_unlink = (unlink_method)&list_node_unlink,
     .m_traverse = (traverse_method)&list_node_traverse,
     .m_destructor = (desctructor_method)&list_node_destructor};

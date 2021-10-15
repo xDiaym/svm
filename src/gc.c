@@ -1,12 +1,9 @@
 #include <gc.h>
 #include <objects/object.h>
 
-static gc_stat_t g_gc_stat = {
-    .marked = 0,
-    .deleted = 0
-};
+static gc_stat_t g_gc_stat = {.marked = 0, .deleted = 0};
 
-int mark_traverse(svm_object_t *this, size_t* marked) {
+int mark_traverse(svm_object_t *this, size_t *marked) {
   ++(*marked);
 
   int previous_flags = this->gc_flags;
@@ -58,6 +55,4 @@ gc_stat_t gc_round(svm_object_t **objs) {
   return stat;
 }
 
-gc_stat_t gc_get_global_stat() {
-  return g_gc_stat;
-}
+gc_stat_t gc_get_global_stat() { return g_gc_stat; }

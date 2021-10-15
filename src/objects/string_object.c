@@ -30,7 +30,7 @@ string_object_t *string_object_from_str(const char *c_str, size_t length) {
 static void string_destructor(string_object_t *this) { free(this->data); }
 
 static string_object_t *string_object_concat(string_object_t *this,
-                                           svm_object_t *other) {
+                                             svm_object_t *other) {
   // TODO: add length method
   string_object_t *other_s = SAFE_CAST(string_object_t, other);
 
@@ -46,7 +46,7 @@ static string_object_t *string_object_concat(string_object_t *this,
 }
 
 static string_object_t *string_object_index(string_object_t *this,
-                                          svm_object_t *index) {
+                                            svm_object_t *index) {
   int64_t idx = SAFE_CAST(int_object_t, index)->value;
   if ((size_t)idx >= this->length) {
     panic("Index out of range.");
