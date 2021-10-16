@@ -15,4 +15,6 @@ gc_stat_t gc_round(svm_object_t **objs);
 size_t gc_mark(svm_object_t *obj);
 size_t gc_sweep();
 
+void gc_print_stat(gc_stat_t stat);
+
 gc_stat_t gc_get_global_stat();

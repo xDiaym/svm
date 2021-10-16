@@ -17,14 +17,15 @@ int main() {
   list_object_push_back(list, AS_SVM_OBJECT(int_1));
 
   int_object_t *int_2 = CAST_TO(int_object_t, RETAIN(int_object_from_int(42)));
-  safe_cast(int_2, TYPE_NAME(list_object_t));
+  // safe_cast(int_2, TYPE_NAME(list_object_t));
 
   svm_object_t *reachable[] = {AS_SVM_OBJECT(list), NULL};
   gc_stat_t round_stat = gc_round(reachable);
 
   gc_stat_t global_stat = gc_get_global_stat();
-  printf("[Global] Marked: %zu, Deleted: %zu\n", global_stat.marked, global_stat.deleted);
-  printf("[Round 1] Marked: %zu, Deleted: %zu\n", round_stat.marked, round_stat.deleted);
+  gc_print_stat(global_stat);
+  gc_print_stat(round_stat);
+
 
   return 0;
 }

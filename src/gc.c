@@ -1,5 +1,6 @@
 #include <gc.h>
 #include <objects/object.h>
+#include <stdio.h>
 
 static gc_stat_t g_gc_stat = {.marked = 0, .deleted = 0};
 
@@ -53,6 +54,13 @@ gc_stat_t gc_round(svm_object_t **objs) {
   g_gc_stat.marked += stat.marked;
 
   return stat;
+}
+
+void gc_print_stat(gc_stat_t stat) {
+  printf("GC Statistic:\n"
+         "* Marked:\t%zu\n"
+         "* Deleted:\t%zu\n",
+         stat.marked, stat.deleted);
 }
 
 gc_stat_t gc_get_global_stat() { return g_gc_stat; }
