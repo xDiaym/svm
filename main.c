@@ -26,6 +26,5 @@ int main() {
   gc_print_stat(global_stat);
   gc_print_stat(round_stat);
 
-
   return 0;
 }

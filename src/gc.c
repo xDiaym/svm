@@ -2,19 +2,22 @@
 #include <objects/object.h>
 #include <stdio.h>
 
-static gc_stat_t g_gc_stat = {.marked = 0, .deleted = 0};
+static gc_stat_t g_gc_stat = {.round = 0,
+                              .alive = 0, // TODO: move object creation to GC
+                              .marked = 0,
+                              .deleted = 0};
 
 int mark_traverse(svm_object_t *this, size_t *marked) {
   ++(*marked);
 
-  int previous_flags = this->gc_flags;
+  uint8_t previous_flags = this->gc_flags;
   this->gc_flags |= GC_MARKED;
   return previous_flags & GC_MARKED;
 }
 
 size_t gc_mark(svm_object_t *obj) {
   size_t marked = 0;
-  svm_object_traverse(obj, &mark_traverse, &marked);
+  svm_object_traverse(obj, (traverse_op)&mark_traverse, &marked);
   return marked;
 }
 
@@ -43,24 +46,27 @@ size_t gc_sweep() {
 }
 
 gc_stat_t gc_round(svm_object_t **objs) {
-  gc_stat_t stat = {0, 0};
+  gc_stat_t stat = {g_gc_stat.round + 1, g_gc_stat.alive, 0, 0};
   while (*objs) {
     stat.marked += gc_mark(*objs);
     ++objs;
   }
   stat.deleted = gc_sweep();
+  stat.alive -= stat.deleted;
 
   g_gc_stat.deleted += stat.deleted;
   g_gc_stat.marked += stat.marked;
+  g_gc_stat.alive = stat.alive;
+  ++g_gc_stat.round;
 
   return stat;
 }
 
 void gc_print_stat(gc_stat_t stat) {
-  printf("GC Statistic:\n"
+  printf("Round #%zu statistic:\n"
          "* Marked:\t%zu\n"
          "* Deleted:\t%zu\n",
-         stat.marked, stat.deleted);
+         stat.round, stat.marked, stat.deleted);
 }
 
 gc_stat_t gc_get_global_stat() { return g_gc_stat; }

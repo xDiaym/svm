@@ -6,6 +6,8 @@
 #define GC_COLLECTABLE BIT(1)
 
 typedef struct {
+  size_t round;
+  size_t alive;
   size_t marked;
   size_t deleted;
 } gc_stat_t;

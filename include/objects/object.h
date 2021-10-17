@@ -8,7 +8,7 @@ typedef struct _svm_object svm_object_t;
 /* List of all operations. */
 #define METHODS(unary, binary) binary(add) binary(index) unary(to_string)
 
-typedef int(traverse_op)(svm_object_t *this, void *args);
+typedef int (*traverse_op)(svm_object_t *this, void *args);
 typedef svm_object_t *(*unary_op)(svm_object_t *this);
 typedef svm_object_t *(*binary_op)(svm_object_t *this, svm_object_t *other);
 
