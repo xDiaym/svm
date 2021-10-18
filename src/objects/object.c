@@ -7,17 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static svm_object_t *g_first_object = NULL;
-static svm_object_t *g_last_object = NULL;
-
-static void update_global_objects_pointers(svm_object_t *obj) {
-  if (g_first_object == NULL) {
-    g_first_object = g_last_object = obj;
-  } else {
-    g_last_object->next = obj;
-    g_last_object = obj;
-  }
-}
 
 static void svm_object_print_type(svm_object_type *type) {
   printf("Type:\n"
@@ -37,20 +26,6 @@ void svm_object_print_debug_info(svm_object_t *object) {
          object, object->ref_count, object->next);
   svm_object_print_type(object->type);
 }
-
-svm_object_t *svm_object_create(svm_object_type *type, size_t object_size) {
-  svm_object_t *object = (svm_object_t *)svm_malloc(object_size);
-  object->next = NULL;
-  object->ref_count = 0;
-  object->type = type;
-  object->gc_flags = GC_COLLECTABLE;
-
-  update_global_objects_pointers(object);
-
-  return object;
-}
-
-svm_object_t *get_first_object() { return g_first_object; }
 
 svm_object_t *safe_cast(svm_object_t *obj, svm_object_type type) {
   if (!HAS_TYPE(type, obj)) {

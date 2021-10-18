@@ -5,6 +5,10 @@
 #define GC_MARKED BIT(0)
 #define GC_COLLECTABLE BIT(1)
 
+#define IS_MARKED(object) (AS_SVM_OBJECT(object)->gc_flags & GC_MARKED)
+#define IS_COLLECTABLE(object) \
+  (AS_SVM_OBJECT(object)->gc_flags & GC_COLLECTABLE)
+
 typedef struct {
   size_t round;
   size_t alive;
@@ -12,11 +16,13 @@ typedef struct {
   size_t deleted;
 } gc_stat_t;
 
+
+svm_object_t *svm_object_create(svm_object_type *type, size_t object_size);
+#define CREATE_OBJECT(object)                                                  \
+  (object *)svm_object_create(&TYPE_NAME(object), sizeof(object))
+
+
 gc_stat_t gc_round(svm_object_t **objs);
 
-size_t gc_mark(svm_object_t *obj);
-size_t gc_sweep();
-
-void gc_print_stat(gc_stat_t stat);
-
 gc_stat_t gc_get_global_stat();
+void gc_print_stat(gc_stat_t stat);

@@ -3,6 +3,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <objects/../gc.h>
+
 typedef struct _svm_object svm_object_t;
 
 /* List of all operations. */
@@ -45,10 +47,6 @@ struct _svm_object {
 #define SVM_OBJECT_HEAD svm_object_t _object
 
 void svm_object_print_debug_info(svm_object_t *object);
-
-svm_object_t *svm_object_create(svm_object_type *type, size_t object_size);
-#define CREATE_OBJECT(object)                                                  \
-  (object *)svm_object_create(&TYPE_NAME(object), sizeof(object))
 
 svm_object_t *get_first_object();
 
