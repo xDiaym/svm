@@ -1,3 +1,4 @@
+#include <allocator.h>
 #include <objects/int_object.h>
 #include <objects/object.h>
 #include <objects/string_object.h>
@@ -27,7 +28,7 @@ static string_object_t *int_object_to_string(int_object_t *this) {
   char *buff = calloc(length, sizeof(char));
   sprintf(buff, "%li", this->value);
   string_object_t *str = string_object_from_str(buff, length);
-  free(buff);
+  svm_free(buff);
   return str;
 }
 

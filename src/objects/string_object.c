@@ -27,7 +27,7 @@ string_object_t *string_object_from_str(const char *c_str, size_t length) {
   return str;
 }
 
-static void string_destructor(string_object_t *this) { free(this->data); }
+static void string_destructor(string_object_t *this) { svm_free(this->data); }
 
 static string_object_t *string_object_concat(string_object_t *this,
                                              svm_object_t *other) {
