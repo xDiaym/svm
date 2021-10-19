@@ -48,8 +48,6 @@ struct _svm_object {
 
 void svm_object_print_debug_info(svm_object_t *object);
 
-svm_object_t *get_first_object();
-
 #define CAST_TO(type, x) ((type *)(x))
 #define AS_SVM_OBJECT(x) CAST_TO(svm_object_t, (x))
 #define SVM_OBJECT_TYPE(x) (AS_SVM_OBJECT(x)->type)
@@ -60,13 +58,6 @@ svm_object_t *get_first_object();
 svm_object_t *safe_cast(svm_object_t *obj, svm_object_type type);
 #define SAFE_CAST(object_class, x)                                             \
   CAST_TO(object_class, (safe_cast(AS_SVM_OBJECT(x), TYPE_NAME(object_class))))
-
-svm_object_t *retain(svm_object_t *obj);
-#define RETAIN(x) retain(AS_SVM_OBJECT(x))
-
-void svm_object_delete(svm_object_t *this);
-void release(svm_object_t *obj);
-#define RELEASE(x) release(AS_SVM_OBJECT(x))
 
 #define GENERATE_UNARY_METHOD_DEFINITION(name)                                 \
   svm_object_t *svm_object_##name(svm_object_t *this);

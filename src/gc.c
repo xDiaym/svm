@@ -11,6 +11,8 @@ static gc_stat_t g_gc_stat = {.round = 0,
 static svm_object_t *g_first_object = NULL;
 static svm_object_t *g_last_object = NULL;
 
+static svm_object_t *get_first_object() { return g_first_object; }
+
 static void update_global_objects_pointers(svm_object_t *obj) {
   if (g_first_object == NULL) {
     g_first_object = g_last_object = obj;
@@ -33,9 +35,28 @@ svm_object_t *svm_object_create(svm_object_type *type, size_t object_size) {
   return object;
 }
 
-svm_object_t *get_first_object() { return g_first_object; }
+svm_object_t *retain(svm_object_t *obj) {
+  ++obj->ref_count;
+  return obj;
+}
 
-int mark_traverse(svm_object_t *this, size_t *marked) {
+void svm_object_delete(svm_object_t *this) {
+  if (SVM_OBJECT_TYPE(this)->m_destructor != NULL) {
+    SVM_OBJECT_TYPE(this)->m_destructor(this);
+  }
+  svm_free(this);
+}
+
+void release(svm_object_t *obj) {
+  if (!obj)
+    return;
+  --obj->ref_count;
+  if (obj->ref_count == 0) {
+    svm_object_delete(obj);
+  }
+}
+
+static int mark_traverse(svm_object_t *this, size_t *marked) {
   ++(*marked);
 
   uint8_t previous_flags = this->gc_flags;
@@ -43,13 +64,13 @@ int mark_traverse(svm_object_t *this, size_t *marked) {
   return previous_flags & GC_MARKED;
 }
 
-size_t gc_mark(svm_object_t *obj) {
+static size_t gc_mark(svm_object_t *obj) {
   size_t marked = 0;
   svm_object_traverse(obj, (traverse_op)&mark_traverse, &marked);
   return marked;
 }
 
-size_t gc_sweep() {
+static size_t gc_sweep() {
   size_t deleted = 0;
   svm_object_t *obj = get_first_object();
   svm_object_t *next = NULL;
@@ -99,3 +120,4 @@ void gc_print_stat(gc_stat_t stat) {
 }
 
 gc_stat_t gc_get_global_stat() { return g_gc_stat; }
+

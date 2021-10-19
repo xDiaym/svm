@@ -19,6 +19,8 @@ int main() {
   int_object_t *int_2 = CAST_TO(int_object_t, RETAIN(int_object_from_int(42)));
   // safe_cast(int_2, TYPE_NAME(list_object_t));
 
+  gc_print_stat(gc_get_global_stat());
+
   svm_object_t *reachable[] = {AS_SVM_OBJECT(list), NULL};
   gc_stat_t round_stat = gc_round(reachable);
 

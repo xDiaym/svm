@@ -35,27 +35,6 @@ svm_object_t *safe_cast(svm_object_t *obj, svm_object_type type) {
   return obj;
 }
 
-svm_object_t *retain(svm_object_t *obj) {
-  ++obj->ref_count;
-  return obj;
-}
-
-void svm_object_delete(svm_object_t *this) {
-  if (SVM_OBJECT_TYPE(this)->m_destructor != NULL) {
-    SVM_OBJECT_TYPE(this)->m_destructor(this);
-  }
-  svm_free(this);
-}
-
-void release(svm_object_t *obj) {
-  if (!obj)
-    return;
-  --obj->ref_count;
-  if (obj->ref_count == 0) {
-    svm_object_delete(obj);
-  }
-}
-
 #define GET_METHOD(object, method_name) SVM_OBJECT_TYPE(object)->m_##method_name
 #define GENERATE_BUILTIN_UNARY_OP_IMPL(method)                                 \
   svm_object_t *svm_object_##method(svm_object_t *this) {                      \
