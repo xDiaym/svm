@@ -8,7 +8,7 @@ string_object_t *string_object_from_c_str(const char *c_str) {
   string_object_t *str = CREATE_OBJECT(string_object_t);
   str->length = strlen(c_str);
   str->data = svm_calloc(str->length, sizeof(char));
-  assert(str->data); // TODO:
+  SVM_ASSERT(str->data, "Failed to allocate memory");
 
   strcpy(str->data, c_str);
 
@@ -19,7 +19,7 @@ string_object_t *string_object_from_str(const char *c_str, size_t length) {
   string_object_t *str = CREATE_OBJECT(string_object_t);
   str->length = length + 1;
   str->data = svm_calloc(str->length, sizeof(char));
-  assert(str->data); // TODO:
+  SVM_ASSERT(str->data, "Failed to allocate memory.");
 
   memcpy(str->data, c_str, length);
   str->data[length] = '\0';
@@ -37,7 +37,7 @@ static string_object_t *string_object_concat(string_object_t *this,
   string_object_t *str = CREATE_OBJECT(string_object_t);
   str->length = this->length + other_s->length;
   str->data = svm_calloc(str->length, sizeof(char));
-  assert(str->data); // TODO:
+  SVM_ASSERT(str->data, "Failed to allocate memory.");
 
   memcpy(str->data, this->data, this->length);
   memcpy(str->data + this->length, other_s->data, str->length);

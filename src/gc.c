@@ -1,12 +1,10 @@
-#include <gc.h>
 #include <allocator.h>
+#include <gc.h>
 #include <objects/object.h>
 #include <stdio.h>
 
-static gc_stat_t g_gc_stat = {.round = 0,
-                              .alive = 0, // TODO: move object creation to GC
-                              .marked = 0,
-                              .deleted = 0};
+static gc_stat_t g_gc_stat = {
+    .round = 0, .alive = 0, .marked = 0, .deleted = 0};
 
 static svm_object_t *g_first_object = NULL;
 static svm_object_t *g_last_object = NULL;
@@ -120,4 +118,3 @@ void gc_print_stat(gc_stat_t stat) {
 }
 
 gc_stat_t gc_get_global_stat() { return g_gc_stat; }
-

@@ -6,7 +6,7 @@
 #define GC_COLLECTABLE BIT(1)
 
 #define IS_MARKED(object) (AS_SVM_OBJECT(object)->gc_flags & GC_MARKED)
-#define IS_COLLECTABLE(object) \
+#define IS_COLLECTABLE(object)                                                 \
   (AS_SVM_OBJECT(object)->gc_flags & GC_COLLECTABLE)
 
 typedef struct {
@@ -16,10 +16,8 @@ typedef struct {
   size_t deleted;
 } gc_stat_t;
 
-
 typedef struct _svm_object_type svm_object_type;
 typedef struct _svm_object svm_object_t;
-
 
 svm_object_t *svm_object_create(svm_object_type *type, size_t object_size);
 #define CREATE_OBJECT(object)                                                  \

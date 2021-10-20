@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 static void svm_object_print_type(svm_object_type *type) {
   printf("Type:\n"
          "destructor: %p\n"

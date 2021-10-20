@@ -12,6 +12,7 @@
   - [ ] Find easier way to store type and cast
   - [ ] Rename methods/strutures
   - [ ] Delegate object management to GC
+- [ ] Add `SVM_ASSERT` to `svm_malloc`
 
 ## Done
 - [x] Add GC
