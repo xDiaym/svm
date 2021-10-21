@@ -33,6 +33,7 @@ static string_object_t *int_object_to_string(int_object_t *this) {
 }
 
 svm_object_type TYPE_NAME(int_object_t) = {
+    .name = "int",
     .m_add = (add_method)&int_object_add,
     .m_to_string = (to_string_method)&int_object_to_string,
 };

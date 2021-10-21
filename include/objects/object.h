@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <objects/../gc.h>
+#include <objects/../svm_gc.h>
 
 typedef struct _svm_object svm_object_t;
 
@@ -26,6 +26,7 @@ METHODS(GENERATE_UNARY_METHOD_TYPEDEF, GENERATE_BINARY_METHOD_TYPEDEF)
 #undef GENERATE_BINARY_METHOD_TYPEDEF
 
 typedef struct _svm_object_type {
+  const char *name;
   /* internal methods */
   traverse_method m_traverse;
   unlink_method m_unlink;
@@ -51,13 +52,13 @@ void svm_object_print_debug_info(svm_object_t *object);
 #define CAST_TO(type, x) ((type *)(x))
 #define AS_SVM_OBJECT(x) CAST_TO(svm_object_t, (x))
 #define SVM_OBJECT_TYPE(x) (AS_SVM_OBJECT(x)->type)
-#define HAS_TYPE(type, x) (SVM_OBJECT_TYPE(x) == &(type))
+#define HAS_TYPE(type, x) (SVM_OBJECT_TYPE(x) == (type))
 #define SAME_TYPE(x, y) (AS_SVM_OBJECT(x)->type == AS_SVM_OBJECT(y)->type)
 
 #define TYPE_NAME(object_name) object_name##_type
-svm_object_t *safe_cast(svm_object_t *obj, svm_object_type type);
+svm_object_t *safe_cast(svm_object_t *obj, svm_object_type *type);
 #define SAFE_CAST(object_class, x)                                             \
-  CAST_TO(object_class, (safe_cast(AS_SVM_OBJECT(x), TYPE_NAME(object_class))))
+  CAST_TO(object_class, (safe_cast(AS_SVM_OBJECT(x), &TYPE_NAME(object_class))))
 
 #define GENERATE_UNARY_METHOD_DEFINITION(name)                                 \
   svm_object_t *svm_object_##name(svm_object_t *this);

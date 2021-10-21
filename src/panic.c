@@ -12,11 +12,11 @@ void panic(const char *message, ...) {
 }
 
 void svm_assert(const char *file, size_t line, const char *condition,
-            const char *message) {
+                const char *message) {
   fprintf(stderr,
           "[%s:%zu] Assertion failed!\n"
           "%s is false",
           file, line, condition);
-  fprintf(stderr, message);
+  fprintf(stderr, "%s", message);
   exit(-1);
 }

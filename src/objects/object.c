@@ -8,28 +8,34 @@
 #include <stdlib.h>
 
 static void svm_object_print_type(svm_object_type *type) {
-  printf("Type:\n"
+  printf("Type <%s>:\n"
          "destructor: %p\n"
          "call: %p\n"
          "index: %p\n"
          "add: %p\n"
          "to_string: %p\n",
+         type->name,
          type->m_destructor, type->m_call, type->m_index, type->m_add,
          type->m_to_string);
 }
 
 void svm_object_print_debug_info(svm_object_t *object) {
+  const char marked = IS_MARKED(object) ? 'M' : '.';
+  const char collectable = IS_COLLECTABLE(object) ? 'C' : '.';
   printf("SVM object at [%p].\n"
          "References: %zu\n"
-         "Next object at: [%p]\n",
-         object, object->ref_count, object->next);
+         "Next object at: [%p]\n"
+         "GC flags: [%c%c]\n",
+         object, object->ref_count, object->next, collectable, marked);
   svm_object_print_type(object->type);
 }
 
-svm_object_t *safe_cast(svm_object_t *obj, svm_object_type type) {
+#define TYPENAME_OR_ANON(type) ((type)->name ? (type)->name : "anonymous type")
+svm_object_t *safe_cast(svm_object_t *obj, svm_object_type *type) {
   if (!HAS_TYPE(type, obj)) {
     // TODO: more informative message
-    panic("Cannot cast.");
+    panic("Cannot cast <%s> to <%s>.", TYPENAME_OR_ANON(obj->type),
+          TYPENAME_OR_ANON(type));
   }
   return obj;
 }

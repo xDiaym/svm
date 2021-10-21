@@ -5,7 +5,7 @@ INCLUDE_DIR=include
 CFLAGS=-std=c99 -ggdb -g -Wall -Wextra -I$(INCLUDE_DIR)
 LDFLAGS=
 
-.PHONY: all clean lint
+.PHONY: all clean lint format
 
 all: $(TARGET)
 

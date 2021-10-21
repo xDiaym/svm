@@ -21,6 +21,7 @@ builtin_function_to_string(builtin_function_object_t *this) {
 }
 
 svm_object_type TYPE_NAME(builtin_function_object_t) = {
+    .name = "builtin function",
     .m_call = (call_method)&builtin_function_call,
     .m_to_string = (to_string_method)&builtin_function_to_string,
 };

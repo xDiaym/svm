@@ -11,7 +11,8 @@
   - [ ] Rename objects
   - [ ] Find easier way to store type and cast
   - [ ] Rename methods/strutures
-  - [ ] Delegate object management to GC
+  - [x] Delegate object management to GC
+  - [ ] GC should be struct with queue of round stat.
 - [ ] Add `SVM_ASSERT` to `svm_malloc`
 
 ## Done

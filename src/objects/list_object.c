@@ -112,6 +112,7 @@ static void list_traverse(list_object_t *this, traverse_op op, void *args) {
 }
 
 svm_object_type TYPE_NAME(list_object_t) = {
+    .name = "list",
     .m_unlink = (unlink_method)&list_unlink,
     .m_traverse = (traverse_method)&list_traverse,
     .m_destructor = (desctructor_method)&list_destructor,

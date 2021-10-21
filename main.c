@@ -1,6 +1,5 @@
 #include <allocator.h>
 #include <common.h>
-#include <objects/../gc.h> // FIXME: rename gc.h(some file has same name)
 #include <objects/builtin_function_object.h>
 #include <objects/int_object.h>
 #include <objects/list_object.h>
@@ -8,6 +7,7 @@
 #include <objects/object.h>
 #include <objects/string_object.h>
 #include <stdio.h>
+#include <svm_gc.h>
 
 int main() {
   int_object_t *int_1 = CAST_TO(int_object_t, RETAIN(int_object_from_int(42)));
@@ -27,6 +27,8 @@ int main() {
   gc_stat_t global_stat = gc_get_global_stat();
   gc_print_stat(global_stat);
   gc_print_stat(round_stat);
+
+  svm_object_print_debug_info(list);
 
   return 0;
 }
