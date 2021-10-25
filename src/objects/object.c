@@ -1,11 +1,10 @@
 #include <allocator.h>
 #include <assert.h>
 #include <common.h>
-#include <gc.h>
+#include <svm_gc.h>
 #include <objects/object.h>
 #include <panic.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 static void svm_object_print_type(svm_object_type *type) {
   printf("Type <%s>:\n"
@@ -33,7 +32,6 @@ void svm_object_print_debug_info(svm_object_t *object) {
 #define TYPENAME_OR_ANON(type) ((type)->name ? (type)->name : "anonymous type")
 svm_object_t *safe_cast(svm_object_t *obj, svm_object_type *type) {
   if (!HAS_TYPE(type, obj)) {
-    // TODO: more informative message
     panic("Cannot cast <%s> to <%s>.", TYPENAME_OR_ANON(obj->type),
           TYPENAME_OR_ANON(type));
   }

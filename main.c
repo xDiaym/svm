@@ -8,27 +8,17 @@
 #include <objects/string_object.h>
 #include <stdio.h>
 #include <svm_gc.h>
+#include <hash_table.h>
 
 int main() {
-  int_object_t *int_1 = CAST_TO(int_object_t, RETAIN(int_object_from_int(42)));
+  int_object_t *int1 = int_object_from_int(42);
+  hash_table_t *ht = hash_table_new();
 
-  list_object_t *list = list_object_new();
-  list_object_push_back(list, AS_SVM_OBJECT(list));
-  list_object_push_back(list, AS_SVM_OBJECT(int_1));
+  hash_table_insert_item(ht, "123", int1);
+  svm_object_t *item = hash_table_search_item(ht, "123");
+  printf("%zu\n", CAST_TO(int_object_t, item)->value);
 
-  int_object_t *int_2 = CAST_TO(int_object_t, RETAIN(int_object_from_int(42)));
-  // safe_cast(int_2, TYPE_NAME(list_object_t));
-
-  gc_print_stat(gc_get_global_stat());
-
-  svm_object_t *reachable[] = {AS_SVM_OBJECT(list), NULL};
-  gc_stat_t round_stat = gc_round(reachable);
-
-  gc_stat_t global_stat = gc_get_global_stat();
-  gc_print_stat(global_stat);
-  gc_print_stat(round_stat);
-
-  svm_object_print_debug_info(list);
+  hash_table_delete(ht);
 
   return 0;
 }

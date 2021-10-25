@@ -2,7 +2,7 @@ TARGET=svm
 SRCS=$(shell find . -name "*.c")
 OBJS=$(SRCS:.c=.o)
 INCLUDE_DIR=include
-CFLAGS=-std=c99 -ggdb -g -Wall -Wextra -I$(INCLUDE_DIR)
+CFLAGS=-std=c11 -ggdb -g -Wall -Wextra -I$(INCLUDE_DIR)
 LDFLAGS=
 
 .PHONY: all clean lint format

@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <objects/../svm_gc.h>
+#include <svm_gc.h>
 
 typedef struct _svm_object svm_object_t;
 

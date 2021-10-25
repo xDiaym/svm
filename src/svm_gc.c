@@ -1,5 +1,5 @@
 #include <allocator.h>
-#include <gc.h>
+#include <svm_gc.h>
 #include <objects/object.h>
 #include <stdio.h>
 
