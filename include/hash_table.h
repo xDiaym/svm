@@ -4,7 +4,7 @@
 typedef struct _svm_object svm_object_t;
 
 typedef struct {
-  const char *key;
+  char *key;
   svm_object_t *value;
 } hash_table_item_t;
 

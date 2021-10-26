@@ -15,8 +15,12 @@ int main() {
   hash_table_t *ht = hash_table_new();
 
   hash_table_insert_item(ht, "123", int1);
-  svm_object_t *item = hash_table_search_item(ht, "123");
-  printf("%zu\n", CAST_TO(int_object_t, item)->value);
+  svm_object_t *item1 = hash_table_search_item(ht, "123");
+  printf("[%p] %zu\n", item1, CAST_TO(int_object_t, item1)->value);
+
+  hash_table_delete_item(ht, "123");
+  svm_object_t *item2 = hash_table_search_item(ht, "123");
+  printf("%p\n", item2);
 
   hash_table_delete(ht);
 

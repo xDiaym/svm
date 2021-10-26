@@ -13,7 +13,9 @@
   - [ ] Rename methods/strutures
   - [x] Delegate object management to GC
   - [ ] GC should be struct with queue of round stat.
+- [ ] Add non c-string api to `hash_table`. 
 - [ ] Add `SVM_ASSERT` to `svm_malloc`
+- [ ] Add lazy item init to hash table.
 
 ## Done
 - [x] Add GC

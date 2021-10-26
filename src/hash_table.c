@@ -1,6 +1,7 @@
 #include <allocator.h>
 #include <hash_table.h>
 #include <objects/object.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define HASH_TABLE_INITIAL_SIZE (7)
@@ -43,12 +44,13 @@ hash_table_t *hash_table_new() {
   ht->size = 0;
   ht->capacity = HASH_TABLE_INITIAL_SIZE;
   ht->items = svm_calloc(ht->capacity, sizeof(svm_object_t*));
+
   return ht;
 }
 
 void hash_table_delete(hash_table_t *ht) {
   for (size_t i = 0; i < ht->capacity; ++i) {
-    if (ht->items[i]) {
+    if (ht->items[i] != NULL) {
       hash_table_item_delete(ht->items[i]);
     }
   }
@@ -73,7 +75,7 @@ svm_object_t *hash_table_search_item(hash_table_t *ht, const char *key) {
   size_t attempt = 0;
   size_t index = hash(key, ht->capacity, attempt);
   hash_table_item_t *item = ht->items[index];
-  while (attempt < ht->capacity && item != NULL) {
+  while (item != NULL) {
     if (strcmp(item->key, key) == 0) {
       return item->value;
     }
@@ -84,4 +86,19 @@ svm_object_t *hash_table_search_item(hash_table_t *ht, const char *key) {
   return NULL;
 }
 
-void hash_table_delete_item(hash_table_t *ht, const char *key);
+void hash_table_delete_item(hash_table_t *ht, const char *key) {
+  size_t attempt = 0;
+  size_t index = hash(key, ht->capacity, attempt);
+  hash_table_item_t *item = ht->items[index];
+  while (item != NULL) {
+    if (strcmp(item->key, key) == 0) {
+      hash_table_item_delete(item);
+      ht->items[index] = NULL;
+      --ht->size;
+      break;
+    }
+    ++attempt;
+    index = hash(key, ht->capacity, attempt);
+    item = ht->items[index];
+  }
+}
