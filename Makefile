@@ -3,7 +3,7 @@ SRCS=$(shell find . -name "*.c")
 OBJS=$(SRCS:.c=.o)
 INCLUDE_DIR=include
 CFLAGS=-std=c11 -ggdb -g -Wall -Wextra -I$(INCLUDE_DIR)
-LDFLAGS=
+LDFLAGS=-lm
 
 .PHONY: all clean lint format
 

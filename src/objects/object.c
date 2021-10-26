@@ -1,10 +1,10 @@
 #include <allocator.h>
 #include <assert.h>
 #include <common.h>
-#include <svm_gc.h>
 #include <objects/object.h>
 #include <panic.h>
 #include <stdio.h>
+#include <svm_gc.h>
 
 static void svm_object_print_type(svm_object_type *type) {
   printf("Type <%s>:\n"
@@ -13,9 +13,8 @@ static void svm_object_print_type(svm_object_type *type) {
          "index: %p\n"
          "add: %p\n"
          "to_string: %p\n",
-         type->name,
-         type->m_destructor, type->m_call, type->m_index, type->m_add,
-         type->m_to_string);
+         type->name, type->m_destructor, type->m_call, type->m_index,
+         type->m_add, type->m_to_string);
 }
 
 void svm_object_print_debug_info(svm_object_t *object) {

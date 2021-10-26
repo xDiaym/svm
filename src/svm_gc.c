@@ -1,7 +1,7 @@
 #include <allocator.h>
-#include <svm_gc.h>
 #include <objects/object.h>
 #include <stdio.h>
+#include <svm_gc.h>
 
 static gc_stat_t g_gc_stat = {
     .round = 0, .alive = 0, .marked = 0, .deleted = 0};
